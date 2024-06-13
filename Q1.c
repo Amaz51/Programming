@@ -5,8 +5,9 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include<pthread.h>
+#include <sys/wait.h>
+
 int main(int argc, char *argv[]) {
     if (argc != 3) {
         fprintf(stderr, "Usage: %s <command> <output_file>\n", argv[0]);
