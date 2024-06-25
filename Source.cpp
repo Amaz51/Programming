@@ -1,173 +1,291 @@
-//#include<iostream>
-//#include<fstream>
-//#include<cstring>
-//#include<string>
+//#include <iostream>
 //using namespace std;
-//int** allocate_matrix(int row, int col) {
-//	int** matrix = new int* [row];
-//	for (int i = 0; i < row; i++) {
-//		*(matrix + i) = new int[col];
-//	}
-//	return matrix;
-//}
-//int** input(ifstream& inp, int& rows, int& cols) {
-//	inp >> rows >> cols;
-//	int** matrix = allocate_matrix(rows, cols);
 //
-//	for (int i = 0; i < rows; i++) {
-//		for (int j = 0; j < cols; j++) {
-//			inp >> *(*(matrix + i) + j);
-//			inp >> matrix[i][j];
+//template <class T>
+//class SortedSet {
+//	struct Node {
+//		T data;
+//		Node* next;
+//
+//		Node(const T& value) : data(value), next(NULL) {}
+//	};
+//
+//	Node* head;
+//	Node* tail;
+//
+//public:
+//	SortedSet() : head(NULL), tail(NULL) {}
+//
+//	void insert(T const data)
+//	{
+//		Node* n = new Node(data);
+//		Node* temp;
+//		if (head == NULL)
+//		{
+//			head = n;
+//			tail = n;
+//			return;
 //		}
-//	}
-//	return matrix;
-//}
-//void output(int** matrix, const int& ROWS, const int& COLS) {
-//	for (int i = 0; i < ROWS; i++) {
-//		int* ptr = *(matrix + i);
-//		for (int j = 0; j < COLS; j++) {
-//			cout << *ptr << "\t";
-//			ptr++;
-//		}
-//		cout << endl;
-//	}
-//}
-//int** addmat(int** a1, int** a2, const int& rows, const int& cols) {
-//	int** sum = allocate_matrix(rows, cols);
-//	for (int i = 0; i < rows; i++) {
-//		for (int j = 0; j < cols; j++) {
-//			*(*(sum + i) + j) = *(*(a1 + i) + j) + *(*(a2 + i) + j);
-//		}
-//	}return sum;
-//}
-//int** transpose_matrix(int** matrix, const int& row, const int& col) {
-//	int** trans = allocate_matrix(row, col);
-//	for (int i = 0; i < row; i++) {
-//		for (int j = 0; j < col; j++) {
-//			*(*(trans + j) + i) = *(*(matrix + i) + j);
-//		}
-//	}
-//	return trans;
-//}
-//bool is_symmetric(int** matrix, const int& row, const int& col) {
-//	bool a = 0;
-//	if (row == col) {
-//		int** trans = transpose_matrix(matrix, row, col);
-//		for (int i = 0; i < row; i++) {
-//			for (int j = 0; j < col; j++) {
-//				if (*(*(trans + i) + j) == *(*(matrix + i) + j))
+//		temp = head;
+//		while (temp != NULL)
+//		{
+//			if (n->data < head->data)
+//			{
+//				n->next = head;
+//				head = n;
+//				return;
+//			}
+//			if (tail->data < n->data)
+//			{
+//				tail->next = n;
+//				tail = n;
+//			}
+//			if (n->data > temp->data)
+//			{
+//				if (n->data < temp->next->data && temp->next != NULL)
 //				{
-//					a = 1;
+//					n->next = temp->next;
+//					temp->next = n;
+//					return;
 //				}
 //			}
-//		}for (int i = 0; i < col; i++)delete[] trans[i];
-//		delete[] trans;
-//	}return a;
-//}
-//void InterchangeRows(int*& row1, int*& row2) {
-//	int* swap = row1;
-//	row1 = row2;
-//	row2 = swap;
-//}
-//void InterchangeRows(int** matrix, const int& rows, const int& cols) {
-//	int r1 = 1;
-//	int r2 = 3;
-//	InterchangeRows(*(matrix + r1 - 1), *(matrix + r2 - 1));
-//}
-//void de_allocate(int** matrix, int row) {
-//	if (matrix != nullptr) {
-//		for (int i = 0; i < row; i++) {
-//			delete[] matrix[i];
+//			if (temp->next == NULL)
+//			{
+//				tail = temp;
+//			}
+//			temp = temp->next;
 //		}
-//		delete[] matrix;
-//		matrix = nullptr;
-//	}
-//}
-//
-//int main() {
-//	cout << "----------------------------MATRIXES----------------------------" << endl << endl;
-//	int ra = 0, cola = 0, rb = 0, colb = 0, rc = 0, colc = 0;
-//	ifstream fin;
-//	fin.open("input.txt");
-//	int** matrix = input(fin, ra, cola);
-//	cout << "The matrix A is " << endl;
-//	output(matrix, ra, cola);
-//	int** mat = input(fin, rb, colb);
-//	cout << "The matrix B is " << endl;
-//	output(mat, rb, colb);
-//	int** matc = input(fin, rc, colc);
-//	cout << "The matrix C is " << endl;
-//	output(matc, rc, colc);
-//	cout << "-------------------------------------------------------------------------------" << endl;
-//	int** ma = allocate_matrix(ra, cola);
-//	if (ra == rb && cola == colb) {
-//
-//		ma = addmat(matrix, mat, ra, cola);
-//		cout << "The addition of matrix A and B is " << endl;
-//		output(ma, ra, cola);
-//		cout << endl;
-//	}
-//	else if (ra != rb || cola != colb) {
-//		cout << "Sum not Possible because of change of order" << endl;
-//	}
-//	int** mac = allocate_matrix(rb, colb);
-//	if (ra == rc && cola == colc) {
-//
-//		cout << "The addition of matrix A and C is " << endl;
-//
-//		mac = addmat(mat, mac, rb, colb);
-//		output(mac, rb, colb);
-//		cout << endl;
-//	}
-//	else if (ra != rc || cola != colc) {
-//		cout << "Sum not Possible because of change of order" << endl;
 //	}
 //
-//	cout << "-------------------------------------------------------------------------------" << endl;
-//
-//
-//
-//	cout << endl << "Transpose of matrix A : " << endl;
-//	int** trans_a = transpose_matrix(matrix, ra, cola);
-//	output(trans_a, cola, ra);
-//
-//	cout << endl << "Transpose of matrix B : " << endl;
-//	int** trans_b = transpose_matrix(mat, rb, colb);
-//	output(trans_b, colb, rb);
-//
-//	cout << endl << "Transpose of matrix C : " << endl;
-//	int** trans_c = transpose_matrix(matc, rc, colc);
-//	output(trans_c, colc, rc);
-//
-//
-//	if (is_symmetric(matrix, ra, cola)) {
-//		cout << endl << "Matrix A is Symmetric." << endl;
-//	}
-//	else  cout << endl << "Matrix A isn't Symmetric." << endl;
-//
-//	if (is_symmetric(mat, rb, colb))
+//	void Delete(int const index)
 //	{
-//		cout << endl << "Matrix B is Symmetric." << endl;
+//		int counter = 0;
+//		Node* temp = head;
+//		Node* todelete;
+//		while (temp != NULL)
+//		{
+//			if (counter == index && head == temp)
+//			{
+//				head = temp->next;
+//				delete temp;
+//				temp = NULL;
+//				return;
+//			}
+//			if (counter + 2 == index && tail == temp->next)
+//			{
+//				tail = temp;
+//				temp = temp->next;
+//				tail->next = NULL;
+//				delete temp;
+//				temp = NULL;
+//				return;
+//			}
+//			if (counter + 1 == index)
+//			{
+//				todelete = temp->next;
+//				temp->next = temp->next->next;
+//				delete todelete;
+//				todelete = NULL;
+//			}
+//			temp = temp->next;
+//			counter++;
+//		}
 //	}
 //
-//	else {
-//		cout << endl << "Matrix b isn't Symmetric." << endl;
+//	void print() const
+//	{
+//		Node* temp = head;
+//
+//		while (temp != NULL)
+//		{
+//			cout << temp->data << "->";
+//			temp = temp->next;
+//		}
+//		cout << endl;
 //	}
 //
-//	cout << endl << "interchanged rows of matrix a are:" << endl;
-//	InterchangeRows(matrix, ra, cola);
+//	void Union(SortedSet<T> const& otherSet)
+//	{
+//		Node* temp1 = head;
+//		Node* temp2 = otherSet.head;
+//		Node* newHead = nullptr;
+//		Node* current = nullptr;
+//
+//		while (temp1 != nullptr || temp2 != nullptr)
+//		{
+//			Node* newNode = nullptr;
+//
+//			if (temp1 == nullptr)
+//			{
+//				newNode = new Node(temp2->data);
+//				temp2 = temp2->next;
+//			}
+//			else if (temp2 == nullptr)
+//			{
+//				newNode = new Node(temp1->data);
+//				temp1 = temp1->next;
+//			}
+//			else if (temp1->data < temp2->data)
+//			{
+//				newNode = new Node(temp1->data);
+//				temp1 = temp1->next;
+//			}
+//			else if (temp1->data > temp2->data)
+//			{
+//				newNode = new Node(temp2->data);
+//				temp2 = temp2->next;
+//			}
+//			else
+//			{
+//				newNode = new Node(temp1->data); // To handle duplicates, choose data from one set.
+//				temp1 = temp1->next;
+//				temp2 = temp2->next;
+//			}
+//
+//			if (newHead == nullptr)
+//			{
+//				newHead = newNode;
+//				current = newHead;
+//			}
+//			else
+//			{
+//				current->next = newNode;
+//				current = current->next;
+//			}
+//		}
+//
+//		// Clean up the old set and update head and tail.
+//		while (head != nullptr)
+//		{
+//			Node* toDelete = head;
+//			head = head->next;
+//			delete toDelete;
+//		}
+//
+//		head = newHead;
+//		tail = current;
+//	}
+//
+//	void rotate(int k)
+//	{
+//		if (k < 0)
+//		{
+//			cout << "Entered number is incorrect";
+//		}
+//		if (k == 0)
+//		{
+//			return;
+//		}
+//		if (k > 1)
+//		{
+//			int counter = 1;
+//			Node* temp = head;
+//			{
+//				tail->next = head;
+//				while (temp != NULL)
+//				{
+//					if (counter == k)
+//					{
+//						tail = temp;
+//						head = temp->next;
+//						temp->next = NULL;
+//						return;
+//					}
+//					temp = temp->next;
+//					counter++;
+//				}
+//			}
+//
+//		}
+//	}
+//	void reverselist()
+//	{
+//		if (head == nullptr || head->next == nullptr)
+//		{
+//			return;
+//		}
+//
+//		Node* prev = nullptr;
+//		Node* current = head;
+//		Node* next = nullptr;
+//
+//		while (current != nullptr)
+//		{
+//			next = current->next;
+//			current->next = prev;
+//			prev = current;
+//			current = next;
+//		}
+//
+//		tail = head;
+//		head = prev;
+//	}
+//	~SortedSet()
+//	{
+//		Node* temp = head;
+//		while (temp)
+//		{
+//			Node* todelete = temp;
+//			temp = temp->next;
+//			delete todelete;
+//		}
+//		head = nullptr;
+//		tail = nullptr;
+//	}
+//};
+//
+//
+//int main()
+//{
+//	SortedSet<int> a;
+//	a.insert(2);
+//	a.insert(1);
+//	a.insert(5);
+//	a.insert(3);
+//	a.insert(4);
+//	a.insert(8);
+//	a.insert(6);
+//	a.insert(7);
+//	a.insert(10);
+//	a.insert(11);
+//	a.insert(10);
+//	a.insert(11);
+//	cout << "After inserting in A" << endl;
+//	a.print();
 //	cout << endl;
-//	cout << "====================Matrix A====================" << endl;
-//	cout << "After interchanging rows " << endl;
-//	output(matrix, ra, cola);
+//	a.Delete(0);
+//	a.Delete(7);
+//	a.Delete(5);
+//	a.Delete(4);
+//	cout << "After deleting in A" << endl;
+//	a.print();
 //	cout << endl;
-//	de_allocate(matrix, ra);
-//	de_allocate(mat, rb);
-//	de_allocate(matc, rc);
-//	de_allocate(ma, ra);
-//	de_allocate(mac, ra);
-//	de_allocate(trans_a, cola);
-//	de_allocate(trans_b, colb);
-//	de_allocate(trans_c, colc);
-//	fin.close();
+//	SortedSet<int> b;
+//	b.insert(2);
+//	b.insert(9);
+//	b.insert(7);
+//	b.insert(5);
+//	b.insert(10);
+//	b.insert(10);
+//	cout << "After inserting in A" << endl;
+//	b.print();
+//	cout << endl;
+//	a.Union(b);
+//	cout << "After union of B with A" << endl;
+//	a.print();
+//	cout << endl;
+//	cout << "Enter ";
+//	int nnn;
+//	cin >> nnn;
+//	a.rotate(nnn);
+//	cout << "After rotation" << endl;
+//	a.print();
+//	cout << endl;
+//	a.reverselist();
+//	cout << "After reversing A" << endl;
+//	a.print();
+//	cout << endl;
+//	cout << "B print:" << endl;
+//	b.print();
+//	cout << endl;
 //}
