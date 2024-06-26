@@ -1,119 +1,125 @@
-#include<iostream>
-#include<cstring>
+#include <iostream>
 using namespace std;
-
-template <typename T>
-class Matrix {
+class IntervalHeap {
 private:
-    T** matrix;
-    int rows, columns;
+    int hsize;
+    int maxsize;
+    int** h;
 
 public:
-    Matrix() {
-        rows = 0;
-        columns = 0;
-        matrix = nullptr;
+    // Constructor
+    IntervalHeap(int s = 100) {
+        maxsize = s;
+        hsize = 0;
+        h = new int* [2];
+        h[0] = new int[maxsize];  //min
+        h[1] = new int[maxsize];  //max
     }
-    Matrix(int rows, int columns) {
-        this->rows = rows;
-        this->columns = columns;
-        matrix = new T * [rows];
-        for (int i = 0; i < rows; i++) {
-            matrix[i] = new T[columns];
+
+    // Destructor
+    ~IntervalHeap() {
+        delete[] h[0];
+        delete[] h[1];
+        delete[] h;
+    }
+
+    void Update(int index, int newLeft, int newRight) {
+        if (index >= 0 && index < hsize) {
+
+            h[0][index] = newLeft;
+            h[1][index] = newRight;
+
+            heapprop(index);
+        }
+        else {
+            cout << "Index is invalid for update." << endl;
         }
     }
-    Matrix(Matrix const& obj) {
-        rows = obj.rows;
-        columns = obj.columns;
-        matrix = new T * [rows];
-        for (int i = 0; i < rows; i++) {
-            matrix[i] = new T[columns];
-            for (int j = 0; j < columns; j++) {
-                matrix[i][j] = obj.matrix[i][j];
+
+    void Delete(int index) {
+        if (index >= 0 && index < hsize) {
+
+            h[0][index] = h[0][hsize - 1];
+            h[1][index] = h[1][hsize - 1];
+
+
+            hsize--;
+            heapprop(index);
+        }
+        else {
+            cout << "Invalid Index for deletion." << endl;
+        }
+    }
+
+    void Insert(int left, int right) {
+        if (hsize >= maxsize) {
+            cout << "Interval heap is full." << endl;
+        }
+        if (hsize < maxsize) {
+            h[0][hsize] = left;
+            h[1][hsize] = right;
+            heapprop(hsize);
+            hsize++;
+        }
+
+    }
+
+    void Display() {
+        cout << "Interval Heap: ";
+        for (int i = 0; i < hsize; ++i) {
+            cout << "(" << h[0][i] << "," << h[1][i] << ") ";
+        }
+        cout << endl;
+    }
+
+private:
+
+    void heapprop(int currind) {
+
+        while (currind > 0) {
+            int parentind = (currind - 1) / 2;
+            if (currind % 2 == 0) {
+
+                if (h[1][currind] > h[1][parentind]) {
+                    swap(h[0][currind], h[0][parentind]);
+                    swap(h[1][currind], h[1][parentind]);
+                    currind = parentind;
+                }
+                else {
+                    break;
+                }
+            }
+            else {
+                if (h[0][currind] < h[0][parentind]) {
+                    swap(h[0][currind], h[0][parentind]);
+                    swap(h[1][currind], h[1][parentind]);
+                    currind = parentind;
+                }
+                else {
+                    break;
+                }
             }
         }
-    }
-    void insertElement(T const& element, int rowNo, int colNo) {
-        if (rowNo >= 0 && colNo >= 0) {
-
-            matrix[rowNo][colNo] = element;
-        }
-    }
-    Matrix<T> operator+(Matrix const& obj) {
-        if (rows != obj.rows || columns != obj.columns) {
-            cout << "Matrices are not of the same sizes." << endl;
-            return Matrix<T>();
-        }
-
-        Matrix<T> result(rows, columns);
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                result.matrix[i][j] = matrix[i][j] + obj.matrix[i][j];
-            }
-        }
-
-        return result;
-    }
-    void print() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                cout << matrix[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-    void transpose() {
-
-        int** temp = new int* [columns];
-        for (int i = 0; i < columns; i++) {
-            temp[i] = new int[rows];
-        }
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                temp[j][i] = matrix[i][j];
-            }
-        }
-        for (int i = 0; i < rows; i++) {
-            delete[] matrix[i];
-        }
-
-
-        delete[] matrix;
-        matrix = temp;
-        int swap = rows;
-        rows = columns;
-        columns = swap;
-    }
-      ~Matrix() {
-        for (int i = 0; i < rows; i++) {
-            delete[] matrix[i];
-        }
-        delete[] matrix;
-        matrix = nullptr;
     }
 };
 
-
 int main() {
-    Matrix<int> m1(2, 3);
-    m1.insertElement(1, 0, 0);
-    m1.insertElement(1, 0, 1);
-    m1.insertElement(1, 0, 2);
-    m1.insertElement(0, 1, 0);
-    m1.insertElement(0, 1, 1);
-    m1.insertElement(0, 1, 2);
-    m1.transpose();
-    Matrix<int> m2(2, 3);
-    m2.insertElement(-1, 0, 0);
-    m2.insertElement(-1, 0, 1);
-    m2.insertElement(-1, 0, 2);
-    m2.insertElement(10, 1, 0);
-    m2.insertElement(5, 1, 1);
-    m2.insertElement(1, 1, 2);
-    m2.transpose();
-    Matrix<int> m3(m2);
-    Matrix<int> m4(m1 + m3);
-    m4.transpose();
-    m4.print();
+    IntervalHeap Iheap(100);
+    Iheap.Insert(2, 30);
+    Iheap.Insert(3, 17);
+    Iheap.Insert(4, 15);
+    Iheap.Insert(4, 12);
+
+    Iheap.Display();
+
+    Iheap.Update(2, 5, 12);
+
+    Iheap.Display();
+
+    Iheap.Insert(3, 52);
+    Iheap.Display();
+    Iheap.Insert(50, 1);
+    Iheap.Delete(1);
+    Iheap.Display();
+
 }
