@@ -1,275 +1,125 @@
 #include<iostream>
+#include<string>
 using namespace std;
+const int maxparticipant = 100;
 
 
-template <typename T>
-class SortedSet {
-private:
-	struct node {
-		T data;
-		node* next;
-		node(const T& val) {
-			data = val;
-			next = NULL;
-		}
-	};
-	node* head;
-	node* tail;
+class Participant {
 public:
-	//Q1
-	//construtor
-	SortedSet() {
-		head = NULL;
-		tail = NULL;
-	}
-	//INSERTION
-	void insert(T const data)
-	{
-		node* neww = new node(data);
-		if (!head) {
-			head = neww;
-			tail = neww;
-			return;
-		}
-		node* temp = head;
-		while (temp) {
-			int h = head->data;
-			int t = tail->data;
-			int tempp = temp->data;
-			if (h > neww->data)
-			{
-				neww->next = head;
-				head = neww;
-				return;
-			}
-			if (t < neww->data)
-			{
-				tail->next = neww;
-				tail = neww;
-			}
-			if (tempp < neww->data && temp->next && neww->data < temp->next->data)
-			{
-				neww->next = temp->next;
-				temp->next = neww;
-				return;
-			}
-			if (!(temp->next))
-			{
-				tail = temp;
-			}
-			temp = temp->next;
-		}
-	}
-
-	//DELETION
-	void Delete(int const ind)
-	{
-		int k = 0;
-		node* temp = head;
-		node* todel;
-		while (temp)
-		{
-			if (k == ind && head == temp) {
-				head = temp->next;
-				delete temp;
-				temp = NULL;
-				return;
-			}
-			if (k + 2 == ind && tail == temp->next) {
-				tail = temp;
-				temp = temp->next;
-				tail->next = NULL;
-				delete temp;
-				temp = NULL;
-				return;
-			}
-			if (k + 1 == ind) {
-				todel = temp->next;
-				temp->next = temp->next->next;
-				delete todel;
-				todel = NULL;
-			}
-			temp = temp->next;
-			k++;
-		}
-	}
-	//UNION
-	void Union(SortedSet<T> const& otherSet)
-	{
-		node* t1 = head;
-		node* t2 = otherSet.head;
-		node* newHead = nullptr;
-		node* curr = nullptr;
-
-		while (t1 || t2)
-		{
-			node* newNode = NULL;
-
-			if (!t1) {
-				newNode = new node(t2->data);
-				t2 = t2->next;
-			}
-			else if (!t2) {
-				newNode = new node(t1->data);
-				t1 = t1->next;
-			}
-			else if (t1->data < t2->data) {
-				newNode = new node(t1->data);
-				t1 = t1->next;
-			}
-			else if (t1->data > t2->data) {
-				newNode = new node(t2->data);
-				t2 = t2->next;
-			}
-			else {
-				newNode = new node(t1->data);
-				t1 = t1->next;
-				t2 = t2->next;
-			}
-
-			if (!newHead) {
-				newHead = newNode;
-				curr = newHead;
-			}
-			else {
-				curr->next = newNode;
-				curr = curr->next;
-			}
-		}
-		while (head)
-		{
-			node* todel = head;
-			head = head->next;
-			delete todel;
-		}
-
-		head = newHead;
-		tail = curr;
-	}
-	//ROTATION
-	void Rotate(int k) {
-
-		node* curr = head;
-		for (int i = 0; i < k - 1; i++) {
-			curr = curr->next;
-		}
-		tail->next = head;
-		head = curr->next;
-		curr->next = NULL;
-		tail = curr;
-	}
-	//REVERSE
-	void reverse() {
-		if (head == nullptr || head->next == nullptr) { return; }
-		node* prev = NULL;
-		node* curr = head;
-		node* nextptr = NULL;
-
-		while (curr != NULL) {
-			nextptr = curr->next;
-			curr->next = prev;
-			prev = curr;
-			curr = nextptr;
-		}
-		head = prev;
-	}
-	//PRINT
-	void display() {
-		node* curr = head;
-		while (curr) {
-			cout << curr->data << "->";
-			curr = curr->next;
-		}cout << "NULL" << endl;
-	}
-	//DESTRUCTOR
-	~SortedSet()
-	{
-		node* temp = head;
-		while (temp)
-		{
-			node* todel = temp;
-			temp = temp->next;
-			delete todel;
-		}
-		head = NULL;
-		tail = NULL;
+	int studentid;
+	string name;
+	string email;
+    Participant() { studentid = 0; }
+	Participant(int student,string n,string mail) {
+		studentid = student;
+		name = n;
+		email = mail;
 	}
 };
 
-
-
-int main()
-{		//Insertion
-	SortedSet<int> list1;
-	cout << "\t\t\t\t\t\t" << "Question 1 " << '\t' << endl;
-	list1.insert(3);
-	list1.insert(20);
-	list1.insert(50);
-	list1.insert(30);
-	list1.insert(10);
-	list1.insert(25);
-	list1.insert(40);
-	list1.insert(60);
-	list1.insert(70);
-	list1.insert(60);
-
-
-	cout << "\t\t\t" << "Insertion in List 1 " << '\t' << endl << endl;
-
-	//Displaying list 1
-	list1.display();
-	cout << endl;
-
-	//Deletion of some elements
-	list1.Delete(3);
-	list1.Delete(70);
-	list1.Delete(25);
-
-	
-	cout << "\t\t\t" << "Deletion in list 1 " << '\t' << endl << endl;
-	list1.display();
-	cout << endl;
-
-	//Insertion in list2
-	SortedSet<int> list2;
-
-	list2.insert(75);
-	list2.insert(85);
-	list2.insert(55);
-	list2.insert(35);
-	list2.insert(15);
-	list2.insert(10);
-
-
-	cout << "\t\t\t" << "Insertion in List 2 " << '\t' << endl << endl;
-	list2.display();
-	cout << endl;
-
-	list1.Union(list2);
-	//UNION
-	cout << "\t\t\t" << "UNION of List 2 with List 1 " << '\t' << endl << endl;
-	list1.display();
-	cout << endl << "\t\t\t\t\t\t" << "Question 2 " << '\t' << endl << endl << "Enter the k nodes to be rotated : ";
-
-
-	int nnn;
-	cin >> nnn;
-	if (nnn < 0) {
-		cout << "Entered incorrect number.";
+class Societies {
+	Participant participant[maxparticipant];
+	int participantcount=0;
+    int participatedsocieties = 0;
+public:
+	Societies() {
+        participantcount=0;
 	}
-	else {
-	cout << endl;
-	list1.Rotate(nnn);
-	cout << "\t\t\t" << "ROTATION" << '\t' << endl << endl;
-	list1.display();
-	}
+    Societies(int ps) {
+        participatedsocieties = ps;
+    }
+void addParticipant(int id, const string& name, const string& email) {
+        if (participantcount < maxparticipant) {
+            participant[participantcount].studentid = id;
+            participant[participantcount].name = name;
+            participant[participantcount].email = email;
+            participantcount++;
+        }
+        else {
+            cout << "The number of participants has been exceded.No more are allowed." << endl;
+        }
+    }
 
+    void removeParticipant(int id) {
+        for (int i = 0; i < participantcount; ++i) {
+            if (participant[i].studentid == id) {
+                
+                participant[i] = participant[participantcount - 1];
+                participantcount--;
+                return;
+            }
+        }
+        cout << "participant is not found.Error" << endl;
+    }
+ void displayParticipants() {
+        for (int i = 0; i < participantcount; ++i) {
+            cout << "Student ID: " << participant[i].studentid<<endl;
+            cout << "Name: " << participant[i].name<<endl;
+              cout  << "Email: " << participant[i].email <<endl;
+        }
+    }
+ void commonstudents(const int societyid[],const int societycount) {
+     for (int i = 0; i < societycount; i++) {
+         for (int j = 0; j < participantcount; j++) {
+             if (participant[j].studentid == societyid[i]) {
+                 cout << "The student with ID " << participant[j].studentid << " is found in multiple societies ." << endl;
+                 return;
+             }
 
-	list1.reverse();
-	cout << endl << "\t\t\t\t\t\t" << "Question 3 " << '\t' << endl << endl << "\t\t\t" << "REVERSE" << '\t' << endl << endl;
-	list1.display();
+         }
+     }cout << "Participant is only in a single society ." << endl;
+ }
+ void mergememberships() {
+     
+     for (int i = 0; i < participatedsocieties; i++) {
+         for (int j = 0; j < participantcount; i++) {
+             if (participatedsocieties == 1) {
+                 cout << "\nThe student has participated in only 1 society.So we cant merge membership." << endl;
+                 return;
+             }
+             else if (participatedsocieties == 0) {
+                 cout << "\nThe student has not participated in any society.Error." << endl;
+                 return;
+             }
+             else if(participant[j].studentid==participant[i].studentid) {
 
+                 cout << "Membership merged" << endl;
+             }
+         }
+     }
+ }
+ void deleteduplicates() {
+     for (int i = 0; i < participatedsocieties; i++) {
+         for (int j = 0; j < participantcount; i++) {
+             if (participatedsocieties == 1) {
+                 cout << "\nThe student has participated in only 1 society.So no duplicate found" << endl;
+                 return;
+             }
+             else if (participatedsocieties == 0) {
+                 cout << "\nThe student has not participated in any society. no duplicate found.Error." << endl;
+                 return;
+             }
+             else if (participant[j].studentid == participant[i].studentid) {
+                 cout << "Duplicates deleted" << endl;
+             }
+         }
+     }
+ }
+};
 
-	cout << endl << "\t\t\t" << "Displaying B " << '\t' << endl << endl;
-	list2.display();
+int main() {
+    Societies event;
+    event.addParticipant(1, "Ali", "ali@gmail.com");//adding the participants
+    event.addParticipant(2, "Ehan", "ehan@gmail.com");
+    event.addParticipant(3, "mehdi", "mehdi@gmail.com");
+    cout << "The participants are :\n";
+    event.displayParticipants();
+    event.removeParticipant(2);//removing participants
+    cout << "\nThe participants after removal are :\n";
+    event.displayParticipants();
+    int societyIDs[] = { 1, 2 };  // Assuming society IDs
+    event.commonstudents(societyIDs, 2);
+    event.mergememberships();
+    event.deleteduplicates();
 }
+
