@@ -1,34 +1,42 @@
-//#include<iostream>
-//using namespace std;
-//
-//void selectionsortt(int a[], int b) {
-//
-//	for (int i = 0; i < b; i++) {
-//		
-//		for (int j = i + 1; j < b; j++) {
-//			if (a[j] < a[i]) {
-//				int temp = a[i];
-//				a[i] = a[j];
-//				a[j] = temp;
-//			}
-//
-//		}
-//	}
-//	cout << "The array is : ";
-//	for (int k = 0; k < b; k++)
-//	{
-//		cout << a[k] << " ";
-//	}
-//	
-//}
-//
-//int main() {
-//	int n, arr[100];
-//	cout << "Enter the size of array : ";
-//	cin >> n;
-//	for (int i = 0; i < n; i++) {
-//		cin >> arr[i];
-//	}
-//	selectionsortt(arr, n);
-//
-//}
+#include<iostream>
+using namespace std;
+class Faculty {
+public:
+	void virtual print() {
+		cout << "Faculty class" << endl;
+	}
+};
+class Administrator :public virtual Faculty {
+public:
+	void print() {
+		cout << "Administrator class" << endl;
+	}
+};
+class Teacher :public virtual Faculty {
+public:
+	void print() {
+		cout << "Teacher class"<<endl;
+	}
+};
+	
+class AdministratorTeacher :public Administrator,public Teacher {
+public:
+	void print() {
+		Teacher::print();
+ 
+	}
+};
+
+int main() {
+	Faculty* f[3];
+	Administrator a;
+	Teacher t;
+	AdministratorTeacher at;
+	f[0] = &a;
+	f[1] = &t;
+	f[2] = &at;
+	for (int i = 0; i < 3; i++) {
+		f[i]->print();
+	}
+
+}
