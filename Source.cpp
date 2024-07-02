@@ -1,173 +1,180 @@
-//#include<iostream>
-//#include<fstream>
-//#include<cstring>
-//#include<string>
-//using namespace std;
-//int** allocate_matrix(int row, int col) {
-//	int** matrix = new int* [row];
-//	for (int i = 0; i < row; i++) {
-//		*(matrix + i) = new int[col];
-//	}
-//	return matrix;
-//}
-//int** input(ifstream& inp, int& rows, int& cols) {
-//	inp >> rows >> cols;
-//	int** matrix = allocate_matrix(rows, cols);
-//
-//	for (int i = 0; i < rows; i++) {
-//		for (int j = 0; j < cols; j++) {
-//			inp >> *(*(matrix + i) + j);
-//			inp >> matrix[i][j];
-//		}
-//	}
-//	return matrix;
-//}
-//void output(int** matrix, const int& ROWS, const int& COLS) {
-//	for (int i = 0; i < ROWS; i++) {
-//		int* ptr = *(matrix + i);
-//		for (int j = 0; j < COLS; j++) {
-//			cout << *ptr << "\t";
-//			ptr++;
-//		}
-//		cout << endl;
-//	}
-//}
-//int** addmat(int** a1, int** a2, const int& rows, const int& cols) {
-//	int** sum = allocate_matrix(rows, cols);
-//	for (int i = 0; i < rows; i++) {
-//		for (int j = 0; j < cols; j++) {
-//			*(*(sum + i) + j) = *(*(a1 + i) + j) + *(*(a2 + i) + j);
-//		}
-//	}return sum;
-//}
-//int** transpose_matrix(int** matrix, const int& row, const int& col) {
-//	int** trans = allocate_matrix(row, col);
-//	for (int i = 0; i < row; i++) {
-//		for (int j = 0; j < col; j++) {
-//			*(*(trans + j) + i) = *(*(matrix + i) + j);
-//		}
-//	}
-//	return trans;
-//}
-//bool is_symmetric(int** matrix, const int& row, const int& col) {
-//	bool a = 0;
-//	if (row == col) {
-//		int** trans = transpose_matrix(matrix, row, col);
-//		for (int i = 0; i < row; i++) {
-//			for (int j = 0; j < col; j++) {
-//				if (*(*(trans + i) + j) == *(*(matrix + i) + j))
-//				{
-//					a = 1;
-//				}
-//			}
-//		}for (int i = 0; i < col; i++)delete[] trans[i];
-//		delete[] trans;
-//	}return a;
-//}
-//void InterchangeRows(int*& row1, int*& row2) {
-//	int* swap = row1;
-//	row1 = row2;
-//	row2 = swap;
-//}
-//void InterchangeRows(int** matrix, const int& rows, const int& cols) {
-//	int r1 = 1;
-//	int r2 = 3;
-//	InterchangeRows(*(matrix + r1 - 1), *(matrix + r2 - 1));
-//}
-//void de_allocate(int** matrix, int row) {
-//	if (matrix != nullptr) {
-//		for (int i = 0; i < row; i++) {
-//			delete[] matrix[i];
-//		}
-//		delete[] matrix;
-//		matrix = nullptr;
-//	}
-//}
-//
-//int main() {
-//	cout << "----------------------------MATRIXES----------------------------" << endl << endl;
-//	int ra = 0, cola = 0, rb = 0, colb = 0, rc = 0, colc = 0;
-//	ifstream fin;
-//	fin.open("input.txt");
-//	int** matrix = input(fin, ra, cola);
-//	cout << "The matrix A is " << endl;
-//	output(matrix, ra, cola);
-//	int** mat = input(fin, rb, colb);
-//	cout << "The matrix B is " << endl;
-//	output(mat, rb, colb);
-//	int** matc = input(fin, rc, colc);
-//	cout << "The matrix C is " << endl;
-//	output(matc, rc, colc);
-//	cout << "-------------------------------------------------------------------------------" << endl;
-//	int** ma = allocate_matrix(ra, cola);
-//	if (ra == rb && cola == colb) {
-//
-//		ma = addmat(matrix, mat, ra, cola);
-//		cout << "The addition of matrix A and B is " << endl;
-//		output(ma, ra, cola);
-//		cout << endl;
-//	}
-//	else if (ra != rb || cola != colb) {
-//		cout << "Sum not Possible because of change of order" << endl;
-//	}
-//	int** mac = allocate_matrix(rb, colb);
-//	if (ra == rc && cola == colc) {
-//
-//		cout << "The addition of matrix A and C is " << endl;
-//
-//		mac = addmat(mat, mac, rb, colb);
-//		output(mac, rb, colb);
-//		cout << endl;
-//	}
-//	else if (ra != rc || cola != colc) {
-//		cout << "Sum not Possible because of change of order" << endl;
-//	}
-//
-//	cout << "-------------------------------------------------------------------------------" << endl;
-//
-//
-//
-//	cout << endl << "Transpose of matrix A : " << endl;
-//	int** trans_a = transpose_matrix(matrix, ra, cola);
-//	output(trans_a, cola, ra);
-//
-//	cout << endl << "Transpose of matrix B : " << endl;
-//	int** trans_b = transpose_matrix(mat, rb, colb);
-//	output(trans_b, colb, rb);
-//
-//	cout << endl << "Transpose of matrix C : " << endl;
-//	int** trans_c = transpose_matrix(matc, rc, colc);
-//	output(trans_c, colc, rc);
-//
-//
-//	if (is_symmetric(matrix, ra, cola)) {
-//		cout << endl << "Matrix A is Symmetric." << endl;
-//	}
-//	else  cout << endl << "Matrix A isn't Symmetric." << endl;
-//
-//	if (is_symmetric(mat, rb, colb))
-//	{
-//		cout << endl << "Matrix B is Symmetric." << endl;
-//	}
-//
-//	else {
-//		cout << endl << "Matrix b isn't Symmetric." << endl;
-//	}
-//
-//	cout << endl << "interchanged rows of matrix a are:" << endl;
-//	InterchangeRows(matrix, ra, cola);
-//	cout << endl;
-//	cout << "====================Matrix A====================" << endl;
-//	cout << "After interchanging rows " << endl;
-//	output(matrix, ra, cola);
-//	cout << endl;
-//	de_allocate(matrix, ra);
-//	de_allocate(mat, rb);
-//	de_allocate(matc, rc);
-//	de_allocate(ma, ra);
-//	de_allocate(mac, ra);
-//	de_allocate(trans_a, cola);
-//	de_allocate(trans_b, colb);
-//	de_allocate(trans_c, colc);
-//	fin.close();
-//}
+#include<iostream>
+#include<string>
+using namespace std;
+class MyString
+{
+private:
+	char* str;
+	int len;
+	char GetStringFromBuffer;
+	char Concatenate;
+
+public:
+
+	MyString operator+(const MyString);
+	MyString& operator=(const MyString&);
+	bool operator<(MyString);
+
+	MyString()
+	{
+		str = NULL;
+		len = 1;
+	}
+	char& operator[](int);
+	MyString operator()(int, int);
+	friend ostream& operator<<(ostream& COUT, const MyString& myString)
+	{
+		if (myString.str != nullptr) {
+			COUT << myString.str;
+
+		}
+		return COUT;
+	}
+	friend istream& operator>> (istream& CIN, MyString& Mystring)
+	{
+
+		char temp[1000];
+		int i = 0;
+		char ch;
+		while ((ch = CIN.get()) != '\n')
+		{
+			temp[i++] = ch;
+		}
+		temp[i] = '\0';
+		Mystring.len = i + 1; // add 1 for the null character
+		Mystring.str = new char[Mystring.len];
+		for (int j = 0; j < i; j++)
+		{
+			Mystring.str[j] = temp[j];
+		}
+		Mystring.str[i] = '\0';
+		return CIN;
+	}
+	bool operator!() {
+		return (str == nullptr || len <= 1);
+	}
+	void myStringCopy(char* dent, const char* sdf)
+	{
+		int i = 0;
+		while (sdf[i] != '\0')
+		{
+			dent[i] = sdf[i];
+			i++;
+		}
+		dent[i] = '\0';
+	}
+
+};
+//--------------------------Add your code here----------------------
+char& MyString ::operator[](int i)
+{
+	return str[i];
+}
+MyString MyString::operator()(int start, int end)
+{
+	int newlen = end - start + 2;
+	char* newStr = new char[newlen];
+	for (int i = 0; i < newlen - 1; i++) {
+		newStr[i] = str[start + i];
+	}
+	newStr[newlen - 1] = '\0';
+
+	MyString ressult;
+	ressult.len = newlen;
+	ressult.str = newStr;
+
+	return ressult;
+}
+
+MyString MyString::operator+(MyString oth)
+{
+	MyString ressult;
+	ressult.len = len + oth.len - 1; // subtracting 1 as the last character is a null character
+	ressult.str = new char[ressult.len];
+	myStringCopy(ressult.str, str);
+	myStringCopy(ressult.str + len - 1, oth.str);
+	return ressult;
+}
+
+bool MyString:: operator<(MyString oth)
+{
+	int i = 0;
+	while (str[i] != '\0' && oth.str[i] != '\0')
+	{
+		if (str[i] < oth.str[i])
+			return true;
+		else if (str[i] > oth.str[i])
+			return false;
+		i++;
+	}
+	if (str[i] == '\0' && oth.str[i] != '\0')
+		return true;
+	return false;
+}
+
+MyString& MyString::operator=(const MyString& oth)
+{
+	if (this != &oth)
+	{
+		delete[] str;
+		len = oth.len;
+		str = new char[len];
+		myStringCopy(str, oth.str);
+	}
+	return *this;
+}
+
+
+//-------------DO_NOT_CHANGE REGION starts below---------------------
+int main()
+{
+	MyString str1, str2, str3, str4; //Default constructor will make a string of lenght 1 having null character only i.e.empty string
+	if (!str1)
+	{
+		cout << "String 1 is Empty.\n";
+		cout << "Str 1  " << str1 << endl << endl << endl;
+
+	}
+	cout << "Enter String 1:\t";
+	cin >> str1;
+	cout << "Enter String 2:\t";
+	cin >> str2;
+	cout << "\n\n\n-------------User Entered-------------\n";
+	cout << "String 1 = " << str1 << endl;
+	cout << "String 2 = " << str2 << endl << endl << endl;
+	//What is following code testing?
+	cout << "Before str1 = str1; str1 = " << str1 << endl;
+	str1 = str1;
+	cout << "After str1 = str1, str1 = " << str1 << endl << endl << endl;
+	cout << "Before str4 = str3 = str1+str2\n";
+	cout << "str1 = " << str1 << endl;
+	cout << "str2 = " << str2 << endl;
+	cout << "str3 = " << str3 << endl;
+	cout << "str4 = " << str4 << endl;
+	str4 = str3 = str1 + str2;
+	cout << "\n\n\n-------------After str4 = str3 = str1+str2\n";
+	cout << "str1 = " << str1 << endl;
+	cout << "str2 = " << str2 << endl;
+	cout << "str3 = " << str3 << endl;
+	cout << "str4 = " << str4 << endl;
+	cout << "\n\n\n-------------Enter String 3:\t";
+	cin >> str3;
+	cout << "\n\n\n-------------Enter String 4:\t";
+	cin >> str4;
+	cout << "\n\n\nstr3 = " << str3 << endl;
+	cout << "str4 = " << str4 << endl;
+	if (str3 < str4)
+	{
+		cout << "String 3 is Less than String 4.\n";
+	}
+	else
+	{
+		cout << "String 3 is NOT Less than String 4.\n";
+	}
+	MyString str5 = str1 + str2;
+	cout << "\n\n\nStr5:\t" << str5 << endl;
+	cout << "Str5[7]:\t" << str5[7] << endl; //Function Call: str5.operator[](7).
+	str5[7] = '$';
+	cout << "\n\nStr5:\t" << str5 << endl;
+	cout << "\n\n\nstr5(5, 10):\t" << str5(5, 12) << endl;// Substring of lenght 10	starting from index 5.Function Call str5.operator()(5, 10) Let the returned MyString or	char* leak
+}
