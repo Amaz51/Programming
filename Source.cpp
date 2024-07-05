@@ -1,245 +1,180 @@
-#include <iostream>
-#include <fstream>
-#include <list>
-#include <vector>
-#include <queue>
-#include <climits>
-
+#include<iostream>
+#include<string>
 using namespace std;
-
-class GraphNode {
-public:
-    int id;
-    string type;
-
-    GraphNode(int id, const string& type) : id(id), type(type) {}
-};
-
-class Graph {
-
-    int V; 
-    vector<list<pair<int, int>>> adjList;
+class MyString
+{
+private:
+	char* str;
+	int len;
+	char GetStringFromBuffer;
+	char Concatenate;
 
 public:
-    Graph(int V);
-    void addVertex(int id, const string& type);
-    void addEdge(int u, int v, int weight);
-    void printFLAN();
 
-    friend class MinHeap; 
+	MyString operator+(const MyString);
+	MyString& operator=(const MyString&);
+	bool operator<(MyString);
+
+	MyString()
+	{
+		str = NULL;
+		len = 1;
+	}
+	char& operator[](int);
+	MyString operator()(int, int);
+	friend ostream& operator<<(ostream& COUT, const MyString& myString)
+	{
+		if (myString.str != nullptr) {
+			COUT << myString.str;
+
+		}
+		return COUT;
+	}
+	friend istream& operator>> (istream& CIN, MyString& Mystring)
+	{
+
+		char temp[1000];
+		int i = 0;
+		char ch;
+		while ((ch = CIN.get()) != '\n')
+		{
+			temp[i++] = ch;
+		}
+		temp[i] = '\0';
+		Mystring.len = i + 1; // add 1 for the null character
+		Mystring.str = new char[Mystring.len];
+		for (int j = 0; j < i; j++)
+		{
+			Mystring.str[j] = temp[j];
+		}
+		Mystring.str[i] = '\0';
+		return CIN;
+	}
+	bool operator!() {
+		return (str == nullptr || len <= 1);
+	}
+	void myStringCopy(char* dent, const char* sdf)
+	{
+		int i = 0;
+		while (sdf[i] != '\0')
+		{
+			dent[i] = sdf[i];
+			i++;
+		}
+		dent[i] = '\0';
+	}
+
 };
+//--------------------------Add your code here----------------------
+char& MyString ::operator[](int i)
+{
+	return str[i];
+}
+MyString MyString::operator()(int start, int end)
+{
+	int newlen = end - start + 2;
+	char* newStr = new char[newlen];
+	for (int i = 0; i < newlen - 1; i++) {
+		newStr[i] = str[start + i];
+	}
+	newStr[newlen - 1] = '\0';
 
-class MinHeap {
+	MyString ressult;
+	ressult.len = newlen;
+	ressult.str = newStr;
 
-    int heapSize;
-    vector<int> positions; 
-    vector<pair<int, int>> heap; 
-
-public:
-    MinHeap(int size);
-    ~MinHeap();
-    void buildHeap(const vector<int>& keys);
-    pair<int, int> extractMin();
-    void decreaseKey(int v, int key);
-    bool isEmpty() const;
-};
-
-Graph::Graph(int V) : V(V) {
-    adjList.resize(V);
+	return ressult;
 }
 
-void Graph::addVertex(int id, const string& type) {
-    GraphNode node(id, type);
-    // store vertices
+MyString MyString::operator+(MyString oth)
+{
+	MyString ressult;
+	ressult.len = len + oth.len - 1; // subtracting 1 as the last character is a null character
+	ressult.str = new char[ressult.len];
+	myStringCopy(ressult.str, str);
+	myStringCopy(ressult.str + len - 1, oth.str);
+	return ressult;
 }
 
-void Graph::addEdge(int u, int v, int weight) {
-    adjList[u].emplace_back(v, weight);
-    adjList[v].emplace_back(u, weight);
+bool MyString:: operator<(MyString oth)
+{
+	int i = 0;
+	while (str[i] != '\0' && oth.str[i] != '\0')
+	{
+		if (str[i] < oth.str[i])
+			return true;
+		else if (str[i] > oth.str[i])
+			return false;
+		i++;
+	}
+	if (str[i] == '\0' && oth.str[i] != '\0')
+		return true;
+	return false;
 }
 
-void Graph::printFLAN() {
-    vector<int> key(V, INT_MAX);
-    vector<int> parent(V, -1);
-
-    MinHeap minHeap(V); 
-    key[0] = 0;
-    minHeap.decreaseKey(0, 0); 
-
-    while (!minHeap.isEmpty()) {
-        int u = minHeap.extractMin().second;
-
-        for (const auto& neighbor : adjList[u]) {
-            int v = neighbor.first;
-            int weight = neighbor.second;
-
-            if (!minHeap.isEmpty() && minHeap.extractMin().first > weight) {
-                key[v] = weight;
-                minHeap.decreaseKey(v, weight);
-                parent[v] = u;
-            }
-        }
-    }
-
-    // Print the constructed FLAN
-    cout << "FLAN Connections:\n";
-    for (int i = 1; i < V; ++i)
-        cout << "Connect computer " << parent[i] << " to " << i << " with wire length " << key[i] << "\n";
+MyString& MyString::operator=(const MyString& oth)
+{
+	if (this != &oth)
+	{
+		delete[] str;
+		len = oth.len;
+		str = new char[len];
+		myStringCopy(str, oth.str);
+	}
+	return *this;
 }
 
-MinHeap::MinHeap(int size) : heapSize(size) {
-    positions.resize(size, -1);
-    heap.resize(size);
-}
 
-MinHeap::~MinHeap() {}
+//-------------DO_NOT_CHANGE REGION starts below---------------------
+int main()
+{
+	MyString str1, str2, str3, str4; //Default constructor will make a string of lenght 1 having null character only i.e.empty string
+	if (!str1)
+	{
+		cout << "String 1 is Empty.\n";
+		cout << "Str 1  " << str1 << endl << endl << endl;
 
-void MinHeap::buildHeap(const vector<int>& keys) {
-    for (int i = 0; i < heapSize; ++i) {
-        heap[i] = make_pair(keys[i], i);
-        positions[i] = i;
-    }
-
-    for (int i = (heapSize - 1) / 2; i >= 0; --i) {
-        int currentIndex = i;
-        while (2 * currentIndex + 1 < heapSize) {
-            int leftChild = 2 * currentIndex + 1;
-            int rightChild = 2 * currentIndex + 2;
-            int smallerChildIndex = leftChild;
-
-            if (rightChild < heapSize && heap[rightChild].first < heap[leftChild].first)
-                smallerChildIndex = rightChild;
-
-            if (heap[currentIndex].first < heap[smallerChildIndex].first)
-                break;
-
-            swap(heap[currentIndex], heap[smallerChildIndex]);
-            swap(positions[heap[currentIndex].second], positions[heap[smallerChildIndex].second]);
-
-            currentIndex = smallerChildIndex;
-        }
-    }
-}
-
-pair<int, int> MinHeap::extractMin() {
-    pair<int, int> minNode = heap[0];
-    heap[0] = heap[heapSize - 1];
-    positions[heap[0].second] = 0;
-    --heapSize;
-
-    int currentIndex = 0;
-    while (2 * currentIndex + 1 < heapSize) {
-        int leftChild = 2 * currentIndex + 1;
-        int rightChild = 2 * currentIndex + 2;
-        int smallerChildIndex = leftChild;
-
-        if (rightChild < heapSize && heap[rightChild].first < heap[leftChild].first)
-            smallerChildIndex = rightChild;
-
-        if (heap[currentIndex].first < heap[smallerChildIndex].first)
-            break;
-
-        swap(heap[currentIndex], heap[smallerChildIndex]);
-        swap(positions[heap[currentIndex].second], positions[heap[smallerChildIndex].second]);
-
-        currentIndex = smallerChildIndex;
-    }
-
-    return minNode;
-}
-
-void MinHeap::decreaseKey(int v, int key) {
-    int index = positions[v];
-    heap[index].first = key;
-
-    while (index > 0 && heap[index].first < heap[(index - 1) / 2].first) {
-        swap(heap[index], heap[(index - 1) / 2]);
-        swap(positions[heap[index].second], positions[heap[(index - 1) / 2].second]);
-        index = (index - 1) / 2;
-    }
-}
-
-bool MinHeap::isEmpty() const {
-    return heapSize == 0;
-}
-
-int main() {
-    int choice;
-    Graph g(0);
-
-    do {
-        cout << "\nMenu:\n";
-        cout << "1. Input a graph from a file\n";
-        cout << "2. Save a graph in a file\n";
-        cout << "3. Add a vertex in the existing graph\n";
-        cout << "4. Add an edge in the existing graph\n";
-        cout << "5. Print the set of edges that covers all the vertices using the algorithm\n";
-        cout << "0. Exit\n";
-        cout << "Enter your choice: ";
-        cin >> choice;
-
-        switch (choice) {
-        case 1: {
-            ifstream inputFile("input.txt"); 
-            if (!inputFile) {
-                cerr << "Error opening the file.\n";
-                return 1;
-            }
-
-            int V, E;
-            inputFile >> V; 
-            g = Graph(V);
-
-            // Read vertex information
-            for (int i = 0; i < V; ++i) {
-                int id;
-                string type;
-                inputFile >> id >> type;
-                g.addVertex(id, type);
-            }
-
-            inputFile >> E; // Read the number of edges
-
-            // Read edges and weights from the file
-            for (int i = 0; i < E; ++i) {
-                int u, v, weight;
-                inputFile >> u >> v >> weight;
-                g.addEdge(u, v, weight);
-            }
-
-            inputFile.close();
-            break;
-        }
-        case 2: {
-            // Implement saving the graph to a file
-            break;
-        }
-        case 3: {
-            int id;
-            string type;
-            cout << "Enter the ID and type of the vertex to add: ";
-            cin >> id >> type;
-            g.addVertex(id, type);
-            break;
-        }
-        case 4: {
-            int u, v, weight;
-            cout << "Enter the vertices and weight of the edge to add: ";
-            cin >> u >> v >> weight;
-            g.addEdge(u, v, weight);
-            break;
-        }
-        case 5: {
-            g.printFLAN();
-            break;
-        }
-        case 0:
-            cout << "Exiting the program.\n";
-            break;
-        default:
-            cout << "Invalid choice. Please enter a valid option.\n";
-        }
-    } while (choice != 0);
-
-    return 0;
+	}
+	cout << "Enter String 1:\t";
+	cin >> str1;
+	cout << "Enter String 2:\t";
+	cin >> str2;
+	cout << "\n\n\n-------------User Entered-------------\n";
+	cout << "String 1 = " << str1 << endl;
+	cout << "String 2 = " << str2 << endl << endl << endl;
+	//What is following code testing?
+	cout << "Before str1 = str1; str1 = " << str1 << endl;
+	str1 = str1;
+	cout << "After str1 = str1, str1 = " << str1 << endl << endl << endl;
+	cout << "Before str4 = str3 = str1+str2\n";
+	cout << "str1 = " << str1 << endl;
+	cout << "str2 = " << str2 << endl;
+	cout << "str3 = " << str3 << endl;
+	cout << "str4 = " << str4 << endl;
+	str4 = str3 = str1 + str2;
+	cout << "\n\n\n-------------After str4 = str3 = str1+str2\n";
+	cout << "str1 = " << str1 << endl;
+	cout << "str2 = " << str2 << endl;
+	cout << "str3 = " << str3 << endl;
+	cout << "str4 = " << str4 << endl;
+	cout << "\n\n\n-------------Enter String 3:\t";
+	cin >> str3;
+	cout << "\n\n\n-------------Enter String 4:\t";
+	cin >> str4;
+	cout << "\n\n\nstr3 = " << str3 << endl;
+	cout << "str4 = " << str4 << endl;
+	if (str3 < str4)
+	{
+		cout << "String 3 is Less than String 4.\n";
+	}
+	else
+	{
+		cout << "String 3 is NOT Less than String 4.\n";
+	}
+	MyString str5 = str1 + str2;
+	cout << "\n\n\nStr5:\t" << str5 << endl;
+	cout << "Str5[7]:\t" << str5[7] << endl; //Function Call: str5.operator[](7).
+	str5[7] = '$';
+	cout << "\n\nStr5:\t" << str5 << endl;
+	cout << "\n\n\nstr5(5, 10):\t" << str5(5, 12) << endl;// Substring of lenght 10	starting from index 5.Function Call str5.operator()(5, 10) Let the returned MyString or	char* leak
 }
