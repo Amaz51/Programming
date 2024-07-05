@@ -1,90 +1,48 @@
-//#include<iostream>
-//using namespace std;
-//template <typename T>
-//struct Node {
-//	int data;
-//	Node* next;
-//	Node(int d) {
-//		data = d;
-//		next = NULL;
-//	}
-//};
-//template<typename T> 
-//class Queue {
-//	Node<T>* top;
-//	Node<T>* bottom;
-//	int size;
-//public:
-//	Queue() {
-//		size = 0;
-//		top = NULL;
-//		bottom = NULL;
-//	}
-//	bool Isempty() {
-//		if (size == 0) {
-//			return 1;
-//
-//		}return 0;
-//	}
-//	bool enque(const T d) {
-//		Node<T>* neww = new Node(d);
-//		if (Isempty()) {
-//			top = bottom = neww;
-//		}
-//		else if (top == bottom) {
-//			bottom->next = newNode;
-//			head = newNode;
-//		}
-//		else {
-//			top->next = newNode;
-//			top = newNode;
-//		}return 1;
-//	}
-//	bool dequeue(T & d) {
-//		if (!Isempty()) {
-//			Node* temp = bottom;
-//			if (bottom->next != NULL) {
-//				bottom = bottom->next;
-//			}delete temp;
-//			return 1;
-//		}
-//	}
-//	void print() {
-//		Node<T>* temp = bottom;
-//		for (; temp != NULL;) {
-//			cout << temp->data << " ";
-//			temp = temp->next;
-//		}cout << endl;
-//	}
-//};
-//class Book {
-//	int ISBN;
-//	bool avail;
-//	string title;
-//	string author;
-//public:
-//	Book():ISBN(0),avail(0),title(""),author("") {
-//	}
-//	Book(int ib, bool ava, string tit, string aut) {
-//		ISBN = ib;
-//		ava = avail;
-//
-//	}
-//	
-//};
-//class patron {
-//	int id; 
-//	string name;
-//	string reserved;
-//public:
-//
-//}; 
-//int main() {
-//	Queue<int> q;
-//	q.enque(1);
-//	q.enque(2);
-//	q.enque(3);
-//	q.print();
-//	q.dequeue();
-//	q.print();
-//}
+
+#include <queue>
+#include <iostream>
+#include <string>
+using namespace std;
+// Function to simulate the Josephus proble
+int main() {
+
+
+   // sf::RenderWindow window(sf::VideoMode(512, 512), "sfml tut", sf::Style::Close | sf::Style::Resize);
+
+   // sf::RectangleShape player(sf::Vector2f(100.0f, 100.0f));
+   /* player.setFillColor(sf::Color::Red);
+    while (window.isOpen()) {
+        sf::Event evnt;
+        while (window.pollEvent(evnt)) {
+            switch (evnt.type) {
+
+            case sf::Event::Closed:
+                window.close();
+                break;
+
+            case sf::Event::Resized:
+                printf("new window width : %i New window height %i\n", evnt.size.width, evnt.size.height);
+                break;
+
+            case sf::Event::TextEntered:
+                if (evnt.text.unicode < 128) {
+                    cout << evnt.text.unicode;
+                }
+            }
+
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+            player.move(-0.1f, 0.0f);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+            player.move(0.1f, 0.0f);
+        }if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+            player.move(0.0f, 0.1f);
+        }if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
+            player.move(0.0f, 0.1f);
+        }
+     window.draw(player);
+    window.display();
+    }
+   */
+}
