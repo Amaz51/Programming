@@ -1,48 +1,95 @@
-
-#include <queue>
-#include <iostream>
-#include <string>
-using namespace std;
-// Function to simulate the Josephus proble
-int main() {
-
-
-   // sf::RenderWindow window(sf::VideoMode(512, 512), "sfml tut", sf::Style::Close | sf::Style::Resize);
-
-   // sf::RectangleShape player(sf::Vector2f(100.0f, 100.0f));
-   /* player.setFillColor(sf::Color::Red);
-    while (window.isOpen()) {
-        sf::Event evnt;
-        while (window.pollEvent(evnt)) {
-            switch (evnt.type) {
-
-            case sf::Event::Closed:
-                window.close();
-                break;
-
-            case sf::Event::Resized:
-                printf("new window width : %i New window height %i\n", evnt.size.width, evnt.size.height);
-                break;
-
-            case sf::Event::TextEntered:
-                if (evnt.text.unicode < 128) {
-                    cout << evnt.text.unicode;
-                }
-            }
-
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-            player.move(-0.1f, 0.0f);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-            player.move(0.1f, 0.0f);
-        }if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-            player.move(0.0f, 0.1f);
-        }if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
-            player.move(0.0f, 0.1f);
-        }
-     window.draw(player);
-    window.display();
-    }
-   */
-}
+//#include<iostream>
+//using namespace std;
+//template <typename T>
+//class Stack {
+//private:
+//    struct Node {
+//        T data;
+//        Node* next;
+//    };
+//
+//    Node* top; 
+//    int size; 
+//
+//public:
+//    Stack() {
+//        top = nullptr;
+//        size = 0;
+//    }
+//
+//    ~Stack() {
+//        while (!isEmpty()) {
+//            pop();
+//        }
+//    }
+//   int sizee() {
+//        return size;
+//    }
+//    bool isEmpty() {
+//        return top == nullptr;
+//    }
+//    bool topp(T& element) {
+//        if (isEmpty()) {
+//            return false;
+//        }
+//
+//        element = top->data;
+//        return true;
+//    }
+//
+//        void pop() {
+//        if (isEmpty()) {
+//            return;
+//        }
+//
+//        Node* temp = top;
+//        top = top->next;
+//        delete temp;
+//        size--;
+//    }
+//
+//    void push(const T& element) {
+//        Node* newNode = new Node();
+//        newNode->data = element;
+//        newNode->next = top;
+//        top = newNode;
+//        size++;
+//    }
+//    void Deletetail() {//task 2
+//        Stack neww;
+//        T element;
+//        while (size != 0) {
+//            topp(element);
+//            pop();
+//            neww.push(element);
+//            
+//        }
+//        neww.pop();
+//        while (neww.size() != 0) {
+//            neww.topp(element);
+//            neww.pop();
+//            push(element);
+//        }
+//    }
+//    
+//};
+//int main() {
+//    Stack<int> stack;
+//    stack.push(1);
+//    stack.push(2);
+//    stack.push(3);
+//    int size = stack.sizee();
+//
+// 
+//    int element;
+//    if (stack.topp(element)) {
+//       cout << "The top element is: " << element <<endl;
+//    }
+//
+//    stack.pop();
+//   
+//    
+//    if (stack.isEmpty()) {
+//        cout << "The stack is empty." << endl;
+//    }
+//}
