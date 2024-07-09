@@ -1,180 +1,276 @@
 #include<iostream>
-#include<string>
+#include<cstring>
 using namespace std;
-class MyString
-{
+
+template <typename T>
+class Matrix {
 private:
-	char* str;
-	int len;
-	char GetStringFromBuffer;
-	char Concatenate;
+    T** matrix;
+    int rows, columns;
 
 public:
+    // Constructor
 
-	MyString operator+(const MyString);
-	MyString& operator=(const MyString&);
-	bool operator<(MyString);
+    Matrix() {
+        rows = 0;
+        columns = 0;
+        matrix = nullptr;
+    }
 
-	MyString()
-	{
-		str = NULL;
-		len = 1;
-	}
-	char& operator[](int);
-	MyString operator()(int, int);
-	friend ostream& operator<<(ostream& COUT, const MyString& myString)
-	{
-		if (myString.str != nullptr) {
-			COUT << myString.str;
+    Matrix(int rows, int columns) {
+        this->rows = rows;
+        this->columns = columns;
+        matrix = new T * [rows];
+        for (int i = 0; i < rows; i++) {}
+        matrix[i] = new T[columns];
+    }
+}
 
-		}
-		return COUT;
-	}
-	friend istream& operator>> (istream& CIN, MyString& Mystring)
-	{
+// Copy constructor
+Matrix(Matrix const& obj) {
+    rows = obj.rows;
+    columns = obj.columns;
+    matrix = new T * [rows];
+    for (int i = 0; i < rows; i++) {
+        matrix[i] = new T[columns];
+        for (int j = 0; j < columns; j++) {
+            matrix[i][j] = obj.matrix[i][j];
+        }
+    }
+}
 
-		char temp[1000];
-		int i = 0;
-		char ch;
-		while ((ch = CIN.get()) != '\n')
-		{
-			temp[i++] = ch;
-		}
-		temp[i] = '\0';
-		Mystring.len = i + 1; // add 1 for the null character
-		Mystring.str = new char[Mystring.len];
-		for (int j = 0; j < i; j++)
-		{
-			Mystring.str[j] = temp[j];
-		}
-		Mystring.str[i] = '\0';
-		return CIN;
-	}
-	bool operator!() {
-		return (str == nullptr || len <= 1);
-	}
-	void myStringCopy(char* dent, const char* sdf)
-	{
-		int i = 0;
-		while (sdf[i] != '\0')
-		{
-			dent[i] = sdf[i];
-			i++;
-		}
-		dent[i] = '\0';
-	}
+// Insert function
+void insertElement(T const& element, int rowNo, int colNo) {
+    if (rowNo >= 0 && colNo >= 0) {
 
+        matrix[rowNo][colNo] = element;
+    }
+}
+
+// Overloaded + operator
+Matrix<T> operator+(Matrix const& obj) {
+    if (rows != obj.rows || columns != obj.columns) {
+        cout << "Matrices are not of the same sizes." << endl;
+        return Matrix<T>();
+    }
+
+    Matrix<T> result(rows, columns);
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            result.matrix[i][j] = matrix[i][j] + obj.matrix[i][j];
+        }
+    }
+
+    return result;
+}
+
+// Print function
+void print() {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Transpose function
+void transpose() {
+
+    int** temp = new int* [columns];
+    for (int i = 0; i < columns; i++) {
+        temp[i] = new int[rows];
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            temp[j][i] = matrix[i][j];
+        }
+    }
+    for (int i = 0; i < rows; i++) {
+        delete[] matrix[i];
+    }
+
+
+    delete[] matrix;
+    matrix = temp;
+    int swap = rows;
+    rows = columns;
+    columns = swap;
+}
+
+// Destructor
+~Matrix() {
+    for (int i = 0; i < rows; i++) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+    matrix = nullptr;
+}
 };
-//--------------------------Add your code here----------------------
-char& MyString ::operator[](int i)
-{
-	return str[i];
-}
-MyString MyString::operator()(int start, int end)
-{
-	int newlen = end - start + 2;
-	char* newStr = new char[newlen];
-	for (int i = 0; i < newlen - 1; i++) {
-		newStr[i] = str[start + i];
-	}
-	newStr[newlen - 1] = '\0';
 
-	MyString ressult;
-	ressult.len = newlen;
-	ressult.str = newStr;
+template <>
+class Matrix <char*> {
+private:
+    char*** data;
+    int numRows, numCols;
 
-	return ressult;
-}
+public:
+    Matrix(int r, int c) : numRows(r), numCols(c) {
+        data = new T * *[numRows];
+        for (int i = 0; i < numRows; ++i) {
+            data[i] = new T * [numCols];
+            for (int j = 0; j < numCols; ++j) {
+                data[i][j] = 0;
+            }
+        }
+    }
 
-MyString MyString::operator+(MyString oth)
-{
-	MyString ressult;
-	ressult.len = len + oth.len - 1; // subtracting 1 as the last character is a null character
-	ressult.str = new char[ressult.len];
-	myStringCopy(ressult.str, str);
-	myStringCopy(ressult.str + len - 1, oth.str);
-	return ressult;
-}
+    Matrix(const Matrix& obj) : numRows(obj.numRows), numCols(obj.numCols) {
+        data = new T * *[numRows];
+        for (int i = 0; i < numRows; ++i) {
+            data[i] = new T * [numCols];
+            for (int j = 0; j < numCols; ++j) {
+                if (obj.data[i][j] != 0) {
+                    data[i][j] = new T[strlen(obj.data[i][j]) + 1];
+                    strcpy(data[i][j], obj.data[i][j]);
+                }
+                else {
+                    data[i][j] = 0;
+                }
+            }
+        }
+    }
 
-bool MyString:: operator<(MyString oth)
-{
-	int i = 0;
-	while (str[i] != '\0' && oth.str[i] != '\0')
-	{
-		if (str[i] < oth.str[i])
-			return true;
-		else if (str[i] > oth.str[i])
-			return false;
-		i++;
-	}
-	if (str[i] == '\0' && oth.str[i] != '\0')
-		return true;
-	return false;
-}
+    void insertElement(const T* element, int rowNo, int colNo) {
+        if (rowNo >= 0 && rowNo < numRows && colNo >= 0 && colNo < numCols) {
+            if (element != 0) {
+                data[rowNo][colNo] = new T[strlen(element) + 1];
+                strcpy(data[rowNo][colNo], element);
+            }
+            else {
+                data[rowNo][colNo] = 0;
+            }
+        }
+        else {
+            cout << "Invalid position for element insertion." << endl;
+        }
+    }
 
-MyString& MyString::operator=(const MyString& oth)
-{
-	if (this != &oth)
-	{
-		delete[] str;
-		len = oth.len;
-		str = new char[len];
-		myStringCopy(str, oth.str);
-	}
-	return *this;
-}
+    Matrix<T> operator+(const Matrix& obj) {
+        if (numRows != obj.numRows || numCols != obj.numCols) {
+            cout << "Matrix dimensions mismatch for addition." << endl;
+            return Matrix<T>(0, 0);
+        }
 
+        Matrix<T> result(numRows, numCols);
+        for (int i = 0; i < numRows; ++i) {
+            for (int j = 0; j < numCols; ++j) {
+                if (data[i][j] != 0 && obj.data[i][j] != 0) {
+                    int len1 = strlen(data[i][j]);
+                    int len2 = strlen(obj.data[i][j]);
+                    result.data[i][j] = new T[len1 + len2 + 1];
+                    strcpy(result.data[i][j], data[i][j]);
+                    strcat(result.data[i][j], obj.data[i][j]);
+                }
+                else {
+                    result.data[i][j] = 0;
+                }
+            }
+        }
+        return result;
+    }
 
-//-------------DO_NOT_CHANGE REGION starts below---------------------
-int main()
-{
-	MyString str1, str2, str3, str4; //Default constructor will make a string of lenght 1 having null character only i.e.empty string
-	if (!str1)
-	{
-		cout << "String 1 is Empty.\n";
-		cout << "Str 1  " << str1 << endl << endl << endl;
+    void print() {
+        for (int i = 0; i < numRows; ++i) {
+            for (int j = 0; j < numCols; ++j) {
+                if (data[i][j] != 0) {
+                    cout << data[i][j] << " ";
+                }
+            }
+            cout << "\n";
+        }
+    }
 
-	}
-	cout << "Enter String 1:\t";
-	cin >> str1;
-	cout << "Enter String 2:\t";
-	cin >> str2;
-	cout << "\n\n\n-------------User Entered-------------\n";
-	cout << "String 1 = " << str1 << endl;
-	cout << "String 2 = " << str2 << endl << endl << endl;
-	//What is following code testing?
-	cout << "Before str1 = str1; str1 = " << str1 << endl;
-	str1 = str1;
-	cout << "After str1 = str1, str1 = " << str1 << endl << endl << endl;
-	cout << "Before str4 = str3 = str1+str2\n";
-	cout << "str1 = " << str1 << endl;
-	cout << "str2 = " << str2 << endl;
-	cout << "str3 = " << str3 << endl;
-	cout << "str4 = " << str4 << endl;
-	str4 = str3 = str1 + str2;
-	cout << "\n\n\n-------------After str4 = str3 = str1+str2\n";
-	cout << "str1 = " << str1 << endl;
-	cout << "str2 = " << str2 << endl;
-	cout << "str3 = " << str3 << endl;
-	cout << "str4 = " << str4 << endl;
-	cout << "\n\n\n-------------Enter String 3:\t";
-	cin >> str3;
-	cout << "\n\n\n-------------Enter String 4:\t";
-	cin >> str4;
-	cout << "\n\n\nstr3 = " << str3 << endl;
-	cout << "str4 = " << str4 << endl;
-	if (str3 < str4)
-	{
-		cout << "String 3 is Less than String 4.\n";
-	}
-	else
-	{
-		cout << "String 3 is NOT Less than String 4.\n";
-	}
-	MyString str5 = str1 + str2;
-	cout << "\n\n\nStr5:\t" << str5 << endl;
-	cout << "Str5[7]:\t" << str5[7] << endl; //Function Call: str5.operator[](7).
-	str5[7] = '$';
-	cout << "\n\nStr5:\t" << str5 << endl;
-	cout << "\n\n\nstr5(5, 10):\t" << str5(5, 12) << endl;// Substring of lenght 10	starting from index 5.Function Call str5.operator()(5, 10) Let the returned MyString or	char* leak
+    void transpose() {
+        Matrix<T> transposed(numCols, numRows);
+        for (int i = 0; i < numRows; ++i) {
+            for (int j = 0; j < numCols; ++j) {
+                if (data[i][j] != 0) {
+                    transposed.insertElement(data[i][j], j, i);
+                }
+            }
+        }
+        *this = transposed;
+    }
+
+    Matrix<T>& operator=(const Matrix& obj) {
+        if (this == &obj) {
+            return *this;
+        }
+
+        for (int i = 0; i < numRows; ++i) {
+            for (int j = 0; j < numCols; ++j) {
+                delete[] data[i][j];
+                if (obj.data[i][j] != 0) {
+                    data[i][j] = new T[strlen(obj.data[i][j]) + 1];
+                    strcpy(data[i][j], obj.data[i][j]);
+                }
+                else {
+                    data[i][j] = 0;
+                }
+            }
+        }
+        return *this;
+    }
+
+    ~Matrix() {
+        for (int i = 0; i < numRows; ++i) {
+            for (int j = 0; j < numCols; ++j) {
+                delete[] data[i][j];
+            }
+            delete[] data[i];
+        }
+        delete[] data;
+    }
+};
+
+int main() {
+    Matrix<int> m1(2, 3);
+    m1.insertElement(1, 0, 0);
+    m1.insertElement(1, 0, 1);
+    m1.insertElement(1, 0, 2);
+    m1.insertElement(0, 1, 0);
+    m1.insertElement(0, 1, 1);
+    m1.insertElement(0, 1, 2);
+    m1.transpose();
+    Matrix<int> m2(2, 3);
+    m2.insertElement(-1, 0, 0);
+    m2.insertElement(-1, 0, 1);
+    m2.insertElement(-1, 0, 2);
+    m2.insertElement(10, 1, 0);
+    m2.insertElement(5, 1, 1);
+    m2.insertElement(1, 1, 2);
+    m2.transpose();
+    Matrix<int> m3(m2);
+    Matrix<int> m4(m1 + m3);
+    m4.transpose();
+    m4.print();
+
+    Matrix<char*> matrixA(2, 2);
+    matrixA.insertElement((char*)"Computer", 0, 0);
+    matrixA.insertElement((char*)"Electrical", 0, 1);
+    matrixA.insertElement((char*)"Business", 1, 0);
+    matrixA.insertElement((char*)"Civil", 1, 1);
+
+    Matrix<char*> matrixB(2, 2);
+    matrixB.insertElement((char*)"Science", 0, 0);
+    matrixB.insertElement((char*)"Engineering", 0, 1);
+    matrixB.insertElement((char*)"Administration", 1, 0);
+    matrixB.insertElement((char*)"Engineering", 1, 1);
+
+    Matrix<char*> matrixC = matrixA + matrixB;
+    matrixC.print();
+
+    return 0;
 }
