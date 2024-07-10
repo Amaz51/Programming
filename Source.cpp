@@ -1,276 +1,291 @@
-#include<iostream>
-#include<cstring>
-using namespace std;
-
-template <typename T>
-class Matrix {
-private:
-    T** matrix;
-    int rows, columns;
-
-public:
-    // Constructor
-
-    Matrix() {
-        rows = 0;
-        columns = 0;
-        matrix = nullptr;
-    }
-
-    Matrix(int rows, int columns) {
-        this->rows = rows;
-        this->columns = columns;
-        matrix = new T * [rows];
-        for (int i = 0; i < rows; i++) {}
-        matrix[i] = new T[columns];
-    }
-}
-
-// Copy constructor
-Matrix(Matrix const& obj) {
-    rows = obj.rows;
-    columns = obj.columns;
-    matrix = new T * [rows];
-    for (int i = 0; i < rows; i++) {
-        matrix[i] = new T[columns];
-        for (int j = 0; j < columns; j++) {
-            matrix[i][j] = obj.matrix[i][j];
-        }
-    }
-}
-
-// Insert function
-void insertElement(T const& element, int rowNo, int colNo) {
-    if (rowNo >= 0 && colNo >= 0) {
-
-        matrix[rowNo][colNo] = element;
-    }
-}
-
-// Overloaded + operator
-Matrix<T> operator+(Matrix const& obj) {
-    if (rows != obj.rows || columns != obj.columns) {
-        cout << "Matrices are not of the same sizes." << endl;
-        return Matrix<T>();
-    }
-
-    Matrix<T> result(rows, columns);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            result.matrix[i][j] = matrix[i][j] + obj.matrix[i][j];
-        }
-    }
-
-    return result;
-}
-
-// Print function
-void print() {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            cout << matrix[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
-
-// Transpose function
-void transpose() {
-
-    int** temp = new int* [columns];
-    for (int i = 0; i < columns; i++) {
-        temp[i] = new int[rows];
-    }
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            temp[j][i] = matrix[i][j];
-        }
-    }
-    for (int i = 0; i < rows; i++) {
-        delete[] matrix[i];
-    }
-
-
-    delete[] matrix;
-    matrix = temp;
-    int swap = rows;
-    rows = columns;
-    columns = swap;
-}
-
-// Destructor
-~Matrix() {
-    for (int i = 0; i < rows; i++) {
-        delete[] matrix[i];
-    }
-    delete[] matrix;
-    matrix = nullptr;
-}
-};
-
-template <>
-class Matrix <char*> {
-private:
-    char*** data;
-    int numRows, numCols;
-
-public:
-    Matrix(int r, int c) : numRows(r), numCols(c) {
-        data = new T * *[numRows];
-        for (int i = 0; i < numRows; ++i) {
-            data[i] = new T * [numCols];
-            for (int j = 0; j < numCols; ++j) {
-                data[i][j] = 0;
-            }
-        }
-    }
-
-    Matrix(const Matrix& obj) : numRows(obj.numRows), numCols(obj.numCols) {
-        data = new T * *[numRows];
-        for (int i = 0; i < numRows; ++i) {
-            data[i] = new T * [numCols];
-            for (int j = 0; j < numCols; ++j) {
-                if (obj.data[i][j] != 0) {
-                    data[i][j] = new T[strlen(obj.data[i][j]) + 1];
-                    strcpy(data[i][j], obj.data[i][j]);
-                }
-                else {
-                    data[i][j] = 0;
-                }
-            }
-        }
-    }
-
-    void insertElement(const T* element, int rowNo, int colNo) {
-        if (rowNo >= 0 && rowNo < numRows && colNo >= 0 && colNo < numCols) {
-            if (element != 0) {
-                data[rowNo][colNo] = new T[strlen(element) + 1];
-                strcpy(data[rowNo][colNo], element);
-            }
-            else {
-                data[rowNo][colNo] = 0;
-            }
-        }
-        else {
-            cout << "Invalid position for element insertion." << endl;
-        }
-    }
-
-    Matrix<T> operator+(const Matrix& obj) {
-        if (numRows != obj.numRows || numCols != obj.numCols) {
-            cout << "Matrix dimensions mismatch for addition." << endl;
-            return Matrix<T>(0, 0);
-        }
-
-        Matrix<T> result(numRows, numCols);
-        for (int i = 0; i < numRows; ++i) {
-            for (int j = 0; j < numCols; ++j) {
-                if (data[i][j] != 0 && obj.data[i][j] != 0) {
-                    int len1 = strlen(data[i][j]);
-                    int len2 = strlen(obj.data[i][j]);
-                    result.data[i][j] = new T[len1 + len2 + 1];
-                    strcpy(result.data[i][j], data[i][j]);
-                    strcat(result.data[i][j], obj.data[i][j]);
-                }
-                else {
-                    result.data[i][j] = 0;
-                }
-            }
-        }
-        return result;
-    }
-
-    void print() {
-        for (int i = 0; i < numRows; ++i) {
-            for (int j = 0; j < numCols; ++j) {
-                if (data[i][j] != 0) {
-                    cout << data[i][j] << " ";
-                }
-            }
-            cout << "\n";
-        }
-    }
-
-    void transpose() {
-        Matrix<T> transposed(numCols, numRows);
-        for (int i = 0; i < numRows; ++i) {
-            for (int j = 0; j < numCols; ++j) {
-                if (data[i][j] != 0) {
-                    transposed.insertElement(data[i][j], j, i);
-                }
-            }
-        }
-        *this = transposed;
-    }
-
-    Matrix<T>& operator=(const Matrix& obj) {
-        if (this == &obj) {
-            return *this;
-        }
-
-        for (int i = 0; i < numRows; ++i) {
-            for (int j = 0; j < numCols; ++j) {
-                delete[] data[i][j];
-                if (obj.data[i][j] != 0) {
-                    data[i][j] = new T[strlen(obj.data[i][j]) + 1];
-                    strcpy(data[i][j], obj.data[i][j]);
-                }
-                else {
-                    data[i][j] = 0;
-                }
-            }
-        }
-        return *this;
-    }
-
-    ~Matrix() {
-        for (int i = 0; i < numRows; ++i) {
-            for (int j = 0; j < numCols; ++j) {
-                delete[] data[i][j];
-            }
-            delete[] data[i];
-        }
-        delete[] data;
-    }
-};
-
-int main() {
-    Matrix<int> m1(2, 3);
-    m1.insertElement(1, 0, 0);
-    m1.insertElement(1, 0, 1);
-    m1.insertElement(1, 0, 2);
-    m1.insertElement(0, 1, 0);
-    m1.insertElement(0, 1, 1);
-    m1.insertElement(0, 1, 2);
-    m1.transpose();
-    Matrix<int> m2(2, 3);
-    m2.insertElement(-1, 0, 0);
-    m2.insertElement(-1, 0, 1);
-    m2.insertElement(-1, 0, 2);
-    m2.insertElement(10, 1, 0);
-    m2.insertElement(5, 1, 1);
-    m2.insertElement(1, 1, 2);
-    m2.transpose();
-    Matrix<int> m3(m2);
-    Matrix<int> m4(m1 + m3);
-    m4.transpose();
-    m4.print();
-
-    Matrix<char*> matrixA(2, 2);
-    matrixA.insertElement((char*)"Computer", 0, 0);
-    matrixA.insertElement((char*)"Electrical", 0, 1);
-    matrixA.insertElement((char*)"Business", 1, 0);
-    matrixA.insertElement((char*)"Civil", 1, 1);
-
-    Matrix<char*> matrixB(2, 2);
-    matrixB.insertElement((char*)"Science", 0, 0);
-    matrixB.insertElement((char*)"Engineering", 0, 1);
-    matrixB.insertElement((char*)"Administration", 1, 0);
-    matrixB.insertElement((char*)"Engineering", 1, 1);
-
-    Matrix<char*> matrixC = matrixA + matrixB;
-    matrixC.print();
-
-    return 0;
-}
+//#include <iostream>
+//using namespace std;
+//
+//template <class T>
+//class SortedSet {
+//	struct Node {
+//		T data;
+//		Node* next;
+//
+//		Node(const T& value) : data(value), next(NULL) {}
+//	};
+//
+//	Node* head;
+//	Node* tail;
+//
+//public:
+//	SortedSet() : head(NULL), tail(NULL) {}
+//
+//	void insert(T const data)
+//	{
+//		Node* n = new Node(data);
+//		Node* temp;
+//		if (head == NULL)
+//		{
+//			head = n;
+//			tail = n;
+//			return;
+//		}
+//		temp = head;
+//		while (temp != NULL)
+//		{
+//			if (n->data < head->data)
+//			{
+//				n->next = head;
+//				head = n;
+//				return;
+//			}
+//			if (tail->data < n->data)
+//			{
+//				tail->next = n;
+//				tail = n;
+//			}
+//			if (n->data > temp->data)
+//			{
+//				if (n->data < temp->next->data && temp->next != NULL)
+//				{
+//					n->next = temp->next;
+//					temp->next = n;
+//					return;
+//				}
+//			}
+//			if (temp->next == NULL)
+//			{
+//				tail = temp;
+//			}
+//			temp = temp->next;
+//		}
+//	}
+//
+//	void Delete(int const index)
+//	{
+//		int counter = 0;
+//		Node* temp = head;
+//		Node* todelete;
+//		while (temp != NULL)
+//		{
+//			if (counter == index && head == temp)
+//			{
+//				head = temp->next;
+//				delete temp;
+//				temp = NULL;
+//				return;
+//			}
+//			if (counter + 2 == index && tail == temp->next)
+//			{
+//				tail = temp;
+//				temp = temp->next;
+//				tail->next = NULL;
+//				delete temp;
+//				temp = NULL;
+//				return;
+//			}
+//			if (counter + 1 == index)
+//			{
+//				todelete = temp->next;
+//				temp->next = temp->next->next;
+//				delete todelete;
+//				todelete = NULL;
+//			}
+//			temp = temp->next;
+//			counter++;
+//		}
+//	}
+//
+//	void print() const
+//	{
+//		Node* temp = head;
+//
+//		while (temp != NULL)
+//		{
+//			cout << temp->data << "->";
+//			temp = temp->next;
+//		}
+//		cout << endl;
+//	}
+//
+//	void Union(SortedSet<T> const& otherSet)
+//	{
+//		Node* temp1 = head;
+//		Node* temp2 = otherSet.head;
+//		Node* newHead = nullptr;
+//		Node* current = nullptr;
+//
+//		while (temp1 != nullptr || temp2 != nullptr)
+//		{
+//			Node* newNode = nullptr;
+//
+//			if (temp1 == nullptr)
+//			{
+//				newNode = new Node(temp2->data);
+//				temp2 = temp2->next;
+//			}
+//			else if (temp2 == nullptr)
+//			{
+//				newNode = new Node(temp1->data);
+//				temp1 = temp1->next;
+//			}
+//			else if (temp1->data < temp2->data)
+//			{
+//				newNode = new Node(temp1->data);
+//				temp1 = temp1->next;
+//			}
+//			else if (temp1->data > temp2->data)
+//			{
+//				newNode = new Node(temp2->data);
+//				temp2 = temp2->next;
+//			}
+//			else
+//			{
+//				newNode = new Node(temp1->data); // To handle duplicates, choose data from one set.
+//				temp1 = temp1->next;
+//				temp2 = temp2->next;
+//			}
+//
+//			if (newHead == nullptr)
+//			{
+//				newHead = newNode;
+//				current = newHead;
+//			}
+//			else
+//			{
+//				current->next = newNode;
+//				current = current->next;
+//			}
+//		}
+//
+//		// Clean up the old set and update head and tail.
+//		while (head != nullptr)
+//		{
+//			Node* toDelete = head;
+//			head = head->next;
+//			delete toDelete;
+//		}
+//
+//		head = newHead;
+//		tail = current;
+//	}
+//
+//	void rotate(int k)
+//	{
+//		if (k < 0)
+//		{
+//			cout << "Entered number is incorrect";
+//		}
+//		if (k == 0)
+//		{
+//			return;
+//		}
+//		if (k > 1)
+//		{
+//			int counter = 1;
+//			Node* temp = head;
+//			{
+//				tail->next = head;
+//				while (temp != NULL)
+//				{
+//					if (counter == k)
+//					{
+//						tail = temp;
+//						head = temp->next;
+//						temp->next = NULL;
+//						return;
+//					}
+//					temp = temp->next;
+//					counter++;
+//				}
+//			}
+//
+//		}
+//	}
+//	void reverselist()
+//	{
+//		if (head == nullptr || head->next == nullptr)
+//		{
+//			return;
+//		}
+//
+//		Node* prev = nullptr;
+//		Node* current = head;
+//		Node* next = nullptr;
+//
+//		while (current != nullptr)
+//		{
+//			next = current->next;
+//			current->next = prev;
+//			prev = current;
+//			current = next;
+//		}
+//
+//		tail = head;
+//		head = prev;
+//	}
+//	~SortedSet()
+//	{
+//		Node* temp = head;
+//		while (temp)
+//		{
+//			Node* todelete = temp;
+//			temp = temp->next;
+//			delete todelete;
+//		}
+//		head = nullptr;
+//		tail = nullptr;
+//	}
+//};
+//
+//
+//int main()
+//{
+//	SortedSet<int> a;
+//	a.insert(2);
+//	a.insert(1);
+//	a.insert(5);
+//	a.insert(3);
+//	a.insert(4);
+//	a.insert(8);
+//	a.insert(6);
+//	a.insert(7);
+//	a.insert(10);
+//	a.insert(11);
+//	a.insert(10);
+//	a.insert(11);
+//	cout << "After inserting in A" << endl;
+//	a.print();
+//	cout << endl;
+//	a.Delete(0);
+//	a.Delete(7);
+//	a.Delete(5);
+//	a.Delete(4);
+//	cout << "After deleting in A" << endl;
+//	a.print();
+//	cout << endl;
+//	SortedSet<int> b;
+//	b.insert(2);
+//	b.insert(9);
+//	b.insert(7);
+//	b.insert(5);
+//	b.insert(10);
+//	b.insert(10);
+//	cout << "After inserting in A" << endl;
+//	b.print();
+//	cout << endl;
+//	a.Union(b);
+//	cout << "After union of B with A" << endl;
+//	a.print();
+//	cout << endl;
+//	cout << "Enter ";
+//	int nnn;
+//	cin >> nnn;
+//	a.rotate(nnn);
+//	cout << "After rotation" << endl;
+//	a.print();
+//	cout << endl;
+//	a.reverselist();
+//	cout << "After reversing A" << endl;
+//	a.print();
+//	cout << endl;
+//	cout << "B print:" << endl;
+//	b.print();
+//	cout << endl;
+//}
