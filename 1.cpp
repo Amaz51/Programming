@@ -1,63 +1,38 @@
 //#include<iostream>
-//#include<fstream>
 //using namespace std;
-//int** InputMatrix(ifstream& ffin, int& rows, int& cols) {
-//    ffin >> rows >> cols; // Read the matrix size from file
-//
-//    // Create the matrix dynamically
-//    int** matrixA = new int* [rows];
-//    int** matrixB = new int* [rows];
-//    int** matrixC = new int* [rows];
-//    for (int i = 0; i < rows; i++) {
-//        matrixA[i] = new int[cols];
-//        matrixB[i] = new int[cols];
-//        matrixC[i] = new int[cols];
-//    }
-//
-//    // Read the matrix elements from file
-//    for (int i = 0; i < rows; i++) {
-//        for (int j = 0; j < cols; j++) {
-//            ffin >> matrixA[i][j];
-//        }
-//    }
-//    for (int i = 0; i < rows; i++) {
-//        for (int j = 0; j < cols; j++) {
-//            ffin >> matrixB[i][j];
-//        }
-//    }
-//    for (int i = 0; i < rows; i++) {
-//        for (int j = 0; j < cols; j++) {
-//            ffin >> matrixC[i][j];
-//        }
-//    }
-//    ffin.close();
-//    return matrixA; // Return the created matrix
-//}
-//void OutputMatrix(int** matrix, const int& ROWS, const int& COLS) {
-//    for (int i = 0; i < ROWS; i++) {
-//        for (int j = 0; j < COLS; j++) {
-//            cout << matrix[i][j]<< " ";
-//        }cout << endl;
-//    }
-//}
 //int main() {
-//
-//    ifstream file;
-//    file.open("file.txt");
-//    
-//    int rows, cols;
-//    
-//    int** matrixA = InputMatrix(file, rows, cols);
-//    int** matrixB = InputMatrix(file, rows, cols);
-//
-//    // Use the matrix here
-//    OutputMatrix(matrixA, rows, cols);
-//    OutputMatrix(matrixB, rows, cols);
-//    // Free the memory allocated for the matrix
-//    for (int i = 0; i < rows; i++) {
-//        delete[] matrixA[i];
-//    }
-//    delete[] matrixA;
-//
-//    return 0;
+//	
+//	cout << "Enter the size of array : ";
+//	int n;
+//	char key;
+//	cin >> n;
+//	char* arr = new char[n];
+//	cout << "Enter the array elements : ";
+//	cin.ignore();
+//	cin.getline(arr, n);
+//	cout << "Enter the encryption key : ";
+//	cin >> key;
+//	
+//	int len = 0;
+//	for (int i = 0; arr[i] != '\0'; i++) {
+//		len++;
+//	}cout << endl << "New size of array is : " << len <<endl;
+//	for (int i = 0; arr[i] != '\0'; i++) {
+//		int shiftarr = arr[i] + (int)key;
+//		if ((arr[i] >= 'a' && arr[i] <= 'z')||(arr[i]==' ')) {
+//			for (int j = 0; shiftarr > 'z'; j++) {
+//				shiftarr -= 26;
+//			}
+//		}
+//		else {
+//			for (int j = 0; shiftarr > 'Z'; j++) {
+//				shiftarr -= 25;
+//			}
+//		}
+//		*(arr + i) = (char)shiftarr;
+//	}cout << "The encrypted array is : ";
+//	for (int i = 0; i<len; i++) {
+//		cout << *(arr + i);
+//	}
+//	delete[] arr;
 //}
