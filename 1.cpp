@@ -1,95 +1,63 @@
 //#include<iostream>
+//#include<fstream>
 //using namespace std;
-//template <typename T>
-//class Stack {
-//private:
-//    struct Node {
-//        T data;
-//        Node* next;
-//    };
+//int** InputMatrix(ifstream& ffin, int& rows, int& cols) {
+//    ffin >> rows >> cols; // Read the matrix size from file
 //
-//    Node* top; 
-//    int size; 
-//
-//public:
-//    Stack() {
-//        top = nullptr;
-//        size = 0;
+//    // Create the matrix dynamically
+//    int** matrixA = new int* [rows];
+//    int** matrixB = new int* [rows];
+//    int** matrixC = new int* [rows];
+//    for (int i = 0; i < rows; i++) {
+//        matrixA[i] = new int[cols];
+//        matrixB[i] = new int[cols];
+//        matrixC[i] = new int[cols];
 //    }
 //
-//    ~Stack() {
-//        while (!isEmpty()) {
-//            pop();
+//    // Read the matrix elements from file
+//    for (int i = 0; i < rows; i++) {
+//        for (int j = 0; j < cols; j++) {
+//            ffin >> matrixA[i][j];
 //        }
 //    }
-//   int sizee() {
-//        return size;
-//    }
-//    bool isEmpty() {
-//        return top == nullptr;
-//    }
-//    bool topp(T& element) {
-//        if (isEmpty()) {
-//            return false;
-//        }
-//
-//        element = top->data;
-//        return true;
-//    }
-//
-//        void pop() {
-//        if (isEmpty()) {
-//            return;
-//        }
-//
-//        Node* temp = top;
-//        top = top->next;
-//        delete temp;
-//        size--;
-//    }
-//
-//    void push(const T& element) {
-//        Node* newNode = new Node();
-//        newNode->data = element;
-//        newNode->next = top;
-//        top = newNode;
-//        size++;
-//    }
-//    void Deletetail() {//task 2
-//        Stack neww;
-//        T element;
-//        while (size != 0) {
-//            topp(element);
-//            pop();
-//            neww.push(element);
-//            
-//        }
-//        neww.pop();
-//        while (neww.size() != 0) {
-//            neww.topp(element);
-//            neww.pop();
-//            push(element);
+//    for (int i = 0; i < rows; i++) {
+//        for (int j = 0; j < cols; j++) {
+//            ffin >> matrixB[i][j];
 //        }
 //    }
-//    
-//};
+//    for (int i = 0; i < rows; i++) {
+//        for (int j = 0; j < cols; j++) {
+//            ffin >> matrixC[i][j];
+//        }
+//    }
+//    ffin.close();
+//    return matrixA; // Return the created matrix
+//}
+//void OutputMatrix(int** matrix, const int& ROWS, const int& COLS) {
+//    for (int i = 0; i < ROWS; i++) {
+//        for (int j = 0; j < COLS; j++) {
+//            cout << matrix[i][j]<< " ";
+//        }cout << endl;
+//    }
+//}
 //int main() {
-//    Stack<int> stack;
-//    stack.push(1);
-//    stack.push(2);
-//    stack.push(3);
-//    int size = stack.sizee();
 //
-// 
-//    int element;
-//    if (stack.topp(element)) {
-//       cout << "The top element is: " << element <<endl;
-//    }
-//
-//    stack.pop();
-//   
+//    ifstream file;
+//    file.open("file.txt");
 //    
-//    if (stack.isEmpty()) {
-//        cout << "The stack is empty." << endl;
+//    int rows, cols;
+//    
+//    int** matrixA = InputMatrix(file, rows, cols);
+//    int** matrixB = InputMatrix(file, rows, cols);
+//
+//    // Use the matrix here
+//    OutputMatrix(matrixA, rows, cols);
+//    OutputMatrix(matrixB, rows, cols);
+//    // Free the memory allocated for the matrix
+//    for (int i = 0; i < rows; i++) {
+//        delete[] matrixA[i];
 //    }
+//    delete[] matrixA;
+//
+//    return 0;
 //}
